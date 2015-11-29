@@ -12,40 +12,40 @@ class HashMapHash
     self
   end
 
-  # Пример данных (source_data)
+  # Data sample (source_data)
   #
-  # {"Контрагенты"=>
-  #   {"Контрагент"=>
+  # {"Contractors"=>
+  #   {"Contractor"=>
   #     [
   #       {
-  #         "ОфициальноеНаименование"=>"Аптечка г.Москва",
-  #         "Роль"=>"Плательщик"
+  #         "OfficialName"=>"FirstAid, Moscow",
+  #         "Role"=>"Payer"
   #       },
   #       {
-  #        "Ид"=>"84266",
-  #        "ОфициальноеНаименование"=>"Аптечка г. Москва (442, Заревый пр-д)",
-  #        "Роль"=>"Получатель"
+  #        "Id"=>"84266",
+  #        "OfficialName"=>"FirstAid, Moscow (442, Glow st)",
+  #        "Role"=>"Receiver"
   #       }
   #     ]
   #   },
-  #   "Позиции"=> {
-  #     "КоличествоПозиций"=> 10
+  #   "Items"=> {
+  #     "NumberOfPositions"=> 10
   #   },
-  #   "Сумма" => 123.45
+  #   "Total" => 123.45
   # }
   #
-  # Чтобы получить из этих данных наименование плательщика и получателя, должен быть передан mapping:
+  # To get data, we should pass a mapping:
   #
   # mapping = {
-  #   payer:    ['Контрагенты', 'Контрагент', %w(Роль Плательщик), 'ОфициальноеНаименование'],
-  #   receiver: ['Контрагенты', 'Контрагент', %w(Роль Получатель), 'Ид'],
-  #   amount:   ['Позиции', 'КоличествоПозиций']
-  #   summ:     'Сумма'
+  #   payer:    ['Contractors', 'Contractor', %w(Role Payer), 'OfficialName'],
+  #   receiver: ['Contractors', 'Contractor', %w(Role Receiver), 'Id'],
+  #   amount:   ['Items', 'NumberOfPositions']
+  #   summ:     'Total'
   # }
   #
-  # attributes на выходе :
+  # output:
   # {
-  #   payer: 'Аптечка г.Москва',
+  #   payer: 'FirstAid, Moscow',
   #   receiver: '84266',
   #   amount: 10,
   #   summ: 123.45
@@ -58,15 +58,34 @@ class HashMapHash
 
   private
 
-  # data: хэш c данными, например source_data
-  # data_mapping: маппинг для одного аттрибута, например
-  # ['Контрагенты', 'Контрагент', %w(Роль Плательщик), 'Ид']
+  # data: hash with source data, for example:
+  # {"Contractors"=>
+  #   {"Contractor"=>
+  #     [
+  #       {
+  #         "OfficialName"=>"FirstAid, Moscow",
+  #         "Role"=>"Payer"
+  #       },
+  #       {
+  #        "Id"=>"84266",
+  #        "OfficialName"=>"FirstAid, Moscow (442, Glow st)",
+  #        "Role"=>"Receiver"
+  #       }
+  #     ]
+  #   }
+  # }
   #
-  # Данные выбираются по первому ключу, в простейшем случае - просто элемент хэша.
-  # Метод рекурсивный, второму проходу передается сокращенный на один ключ маппинг и остаток данных.
+  # data_mapping: mapping for single attribute
+  # ['Contractors', 'Contractor', %w(Role Payer), 'Id']
   #
-  # Если первый ключ - это массив (например ['Роль', 'Плательщик']), то и в данных на этом уровне должен быть
-  # массив, и он фильтруется с помощью #filter_array_of_hashes
+  # This is a recursive method, it takes one key from mapping and uses it
+  # to walk through data.
+  # Next iteration will receive data and mapping starting from next key.
+  #
+  # Arrays here are filters.
+  # If there is an array in mapping, say, ['Role', 'Payer'], then data on this
+  # level also must be some array.
+  # It will be filtered using #filter_array_of_hashes
   #
   def filtered_deep_fetch(data, data_mapping)
     current_filter = data_mapping.shift
@@ -78,26 +97,26 @@ class HashMapHash
     end
   end
 
-  # array: массив хэшей, например:
+  # array is an array of hashes, for example:
   # [
   #   {
-  #     "ОфициальноеНаименование"=>"Аптечка г.Москва",
-  #     "Роль"=>"Плательщик"
+  #     "OfficialName"=>"FirstAid, Moscow",
+  #     "Role"=>"Payer"
   #   },
   #   {
-  #    "Ид"=>"84266",
-  #    "ОфициальноеНаименование"=>"Аптечка г. Москва (442, Заревый пр-д)",
-  #    "Роль"=>"Получатель"
+  #    "Id"=>"84266",
+  #    "OfficialName"=>"FirstAid, Moscow (442, Glow st)",
+  #    "Role"=>"Receiver"
   #   }
   # ]
   #
-  # keyvalue_filter: ключ и значение для фильтра, например ['Роль', 'Плательщик']ъ
+  # keyvalue_filter: key and value for filter, for example ['Role', 'Payer']
   #
-  # На выходе получаем один элемент массива данных:
+  # The output is one particular array element:
   #
   # {
-  #   "ОфициальноеНаименование"=>"Аптечка г.Москва",
-  #   "Роль"=>"Плательщик"
+  #   "OfficialName"=>"FirstAid, Moscow",
+  #   "Role"=>"Payer"
   # },
   def filter_array_of_hashes(data_array, keyvalue_filter)
     filter_key, filter_value = keyvalue_filter
@@ -106,24 +125,24 @@ class HashMapHash
     end
   end
 
-  # метод переводит nested_properties в формат MAPPING.
-  # сделан для того, чтобы в случае нескольких вложенных на одном уровне ключей, не повторять эти уровни
+  # This metod translates nested_properties to mapping format.
+  # It helps avoid repeating multiple keys on one level
   #
-  # Пример:
+  # Sample:
   # nested_properties = {
-  #   prefix: %w(Контрагенты Контрагент),
-  #   filter_key: 'Роль',
-  #   value_key: 'Ид',
+  #   prefix: %w(Contractors Contractor),
+  #   filter_key: 'Role',
+  #   value_key: 'Id',
   #   keys: {
-  #     payer: 'Плательщик',
-  #     receiver: 'Получатель'
+  #     payer: 'Payer',
+  #     receiver: 'Receiver'
   #   }
   # }
   #
-  # На выходе:
+  # Output:
   #
-  # payer:    ['Контрагенты', 'Контрагент', %w(Роль Плательщик), 'Ид'],
-  # receiver: ['Контрагенты', 'Контрагент', %w(Роль Получатель), 'Ид'],
+  # payer:    ['Contractors', 'Contractor', %w(Role Payer), 'Id'],
+  # receiver: ['Contractors', 'Contractor', %w(Role Receiver), 'Id'],
   #
   def nested_mapping(nested_properties)
     nested_properties[:keys].each_with_object({}) do |(key, raw_key), result|
