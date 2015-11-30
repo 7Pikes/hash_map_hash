@@ -7,11 +7,6 @@ class HashMapHash
     @mapping = mapping.extend(DeepDup)
   end
 
-  def add_nested_properties(nested_properties)
-    @mapping.merge! nested_mapping(nested_properties) if nested_properties.any?
-    self
-  end
-
   # Data sample (source_data)
   #
   # {"Contractors"=>
@@ -54,6 +49,11 @@ class HashMapHash
     mapping.deep_dup.each_with_object({}) do |(attribute_key, attribute_mapping), result|
       result[attribute_key] = filtered_deep_fetch source_data, Array(attribute_mapping)
     end
+  end
+
+  def add_nested_properties(nested_properties)
+    @mapping.merge! nested_mapping(nested_properties) if nested_properties.any?
+    self
   end
 
   private

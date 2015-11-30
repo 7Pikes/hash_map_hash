@@ -46,6 +46,13 @@ describe HashMapHash do
     end
   end
 
+  describe '#map' do
+    specify do
+      expect(subject.map data).
+        to eq(anything: 'ThirdValue', something: 'FifthValue')
+    end
+  end
+
   describe '#add_nested_properties' do
     let(:initial_mapping) { { a: :b } }
     let(:nested_mapping) { { c: :d } }
@@ -59,13 +66,6 @@ describe HashMapHash do
         and_return(nested_mapping)
       expect(subject.add_nested_properties(nested_properties)).to eq(subject)
       expect(subject.instance_variable_get('@mapping')).to eq(mapping)
-    end
-  end
-
-  describe '#map' do
-    specify do
-      expect(subject.map data).
-        to eq(anything: 'ThirdValue', something: 'FifthValue')
     end
   end
 
