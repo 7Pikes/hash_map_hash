@@ -47,6 +47,28 @@ describe HashMapHash do
   end
 
   describe '#map' do
+    context 'plain data and map' do
+      let(:data) do
+        {
+          'Items' => 10,
+          'Total' => 123.0
+        }
+      end
+      let(:mapping) do
+        {
+          amount: 'Items',
+          summ: 'Total'
+        }
+      end
+
+      specify do
+        expect(subject.map data).to eq(
+          amount: 10,
+          summ: 123.0
+        )
+      end
+    end
+
     context 'nested' do
       let(:mapping) do
         {
