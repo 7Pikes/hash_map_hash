@@ -19,8 +19,9 @@ This gem has no runtime dependencies.
 
 ## Examples
 
+### Plain data structures
+
 ```ruby
-# plain data structures
 data = {
   'Items' => 10,
   'Total' => 123.0
@@ -34,8 +35,8 @@ mapping = {
 HashMapHash.new(mapping).map(data) # { amount: 10, summ: 123.0 }
 ```
 
+### Nested data structures
 ```ruby
-# nested data structures
 data = { 'Contractors' =>
   { 'Contractor' =>
     [
