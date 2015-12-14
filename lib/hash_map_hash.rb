@@ -9,24 +9,23 @@ class HashMapHash
 
   # Data sample (source_data)
   #
-  # {"Contractors"=>
-  #   {"Contractor"=>
-  #     [
+  # { 'Contractors' =>
+  #     { 'Contractor' => [
   #       {
-  #         "OfficialName"=>"FirstAid, Moscow",
-  #         "Role"=>"Payer"
+  #         'OfficialName' => 'FirstAid, Moscow',
+  #         'Role' => 'Payer'
   #       },
   #       {
-  #        "Id"=>"84266",
-  #        "OfficialName"=>"FirstAid, Moscow (442, Glow st)",
-  #        "Role"=>"Receiver"
+  #         'Id' => '84266',
+  #         'OfficialName' => 'FirstAid, Moscow (442, Glow st)',
+  #         'Role' => 'Receiver'
   #       }
   #     ]
   #   },
-  #   "Items"=> {
-  #     "NumberOfPositions"=> 10
+  #   'Items' => {
+  #     'NumberOfPositions' => 10
   #   },
-  #   "Total" => 123.45
+  #   'Total' => 123.45
   # }
   #
   # To get data, we should pass a mapping:
@@ -34,7 +33,7 @@ class HashMapHash
   # mapping = {
   #   payer:    ['Contractors', 'Contractor', %w(Role Payer), 'OfficialName'],
   #   receiver: ['Contractors', 'Contractor', %w(Role Receiver), 'Id'],
-  #   amount:   ['Items', 'NumberOfPositions']
+  #   amount:   ['Items', 'NumberOfPositions'],
   #   summ:     'Total'
   # }
   #
@@ -100,13 +99,13 @@ class HashMapHash
   # array is an array of hashes, for example:
   # [
   #   {
-  #     "OfficialName"=>"FirstAid, Moscow",
-  #     "Role"=>"Payer"
+  #     'OfficialName' => 'FirstAid, Moscow',
+  #     'Role' => 'Payer'
   #   },
   #   {
-  #    "Id"=>"84266",
-  #    "OfficialName"=>"FirstAid, Moscow (442, Glow st)",
-  #    "Role"=>"Receiver"
+  #     'Id' => '84266',
+  #     'OfficialName' => 'FirstAid, Moscow (442, Glow st)',
+  #     'Role' => 'Receiver'
   #   }
   # ]
   #
@@ -115,8 +114,8 @@ class HashMapHash
   # The output is one particular array element:
   #
   # {
-  #   "OfficialName"=>"FirstAid, Moscow",
-  #   "Role"=>"Payer"
+  #   'OfficialName' => 'FirstAid, Moscow',
+  #   'Role' => 'Payer'
   # },
   def filter_array_of_hashes(data_array, keyvalue_filter)
     filter_key, filter_value = keyvalue_filter

@@ -3,38 +3,40 @@ require 'spec_helper'
 describe HashMapHash do
   let(:mapping) do
     {
-      anything: 'thirdkey',
-      something: %w(fourthkey fifthkey)
+      payer:    ['Contractors', 'Contractor', %w(Role Payer), 'OfficialName'],
+      receiver: ['Contractors', 'Contractor', %w(Role Receiver), 'Id'],
+      amount:   ['Items', 'NumberOfPositions'],
+      summ:     'Total'
     }
   end
   let(:nested_properties) do
     {
-      prefix: %w(firstkey secondkey),
-      filter_key: 'filterkey',
-      value_key: 'filtervalue',
+      prefix: %w(Contractors Contractor),
+      filter_key: 'Role',
+      value_key: 'Id',
       keys: {
-        everything: 'FirstFilter'
+        receiver: 'Receiver'
       }
     }
   end
   let(:data) do
-    { 'firstkey' =>
-      { 'secondkey' =>
-        [
+    { 'Contractors' =>
+        { 'Contractor' => [
           {
-            'filterkey' => 'FirstFilter',
-            'filtervalue' => 'FirstValue'
+            'OfficialName' => 'FirstAid, Moscow',
+            'Role' => 'Payer'
           },
           {
-            'filterkey' => 'SecondFilter',
-            'filtervalue' => 'SecondValue'
+            'Id' => '84266',
+            'OfficialName' => 'FirstAid, Moscow (442, Glow st)',
+            'Role' => 'Receiver'
           }
         ]
       },
-      'thirdkey' => 'ThirdValue',
-      'fourthkey' => {
-        'fifthkey' => 'FifthValue'
-      }
+      'Items' => {
+        'NumberOfPositions' => 10
+      },
+      'Total' => 123.45
     }
   end
 
@@ -70,24 +72,12 @@ describe HashMapHash do
     end
 
     context 'nested' do
-      let(:mapping) do
-        {
-          anything: 'thirdkey',
-          something: %w(fourthkey fifthkey),
-          everything: [
-            'firstkey',
-            'secondkey',
-            %w(filterkey FirstFilter),
-            'filtervalue'
-          ]
-        }
-      end
-
       specify do
         expect(subject.map data).to eq(
-          everything: 'FirstValue',
-          anything: 'ThirdValue',
-          something: 'FifthValue'
+          payer: 'FirstAid, Moscow',
+          receiver: '84266',
+          amount: 10,
+          summ: 123.45
         )
       end
     end
@@ -110,40 +100,52 @@ describe HashMapHash do
   end
 
   describe '#filtered_deep_fetch' do
-    let(:filter1) do
-      ['firstkey', 'secondkey', %w(filterkey SecondFilter), 'filtervalue']
-    end
-    let(:filter2) { ['thirdkey'] }
+    context 'with filter' do
+    let(:filter) { ['Contractors', 'Contractor', %w(Role Receiver), 'Id'] }
 
     specify do
-      expect(subject.send(:filtered_deep_fetch, data, filter1)).
-        to eq('SecondValue')
-      expect(subject.send(:filtered_deep_fetch, data, filter2)).
-        to eq('ThirdValue')
+      expect(subject.send(:filtered_deep_fetch, data, filter)).to eq('84266')
+    end
+    end
+
+    context 'with one element' do
+      let(:filter) { ['Total'] }
+
+      specify do
+        expect(subject.send(:filtered_deep_fetch, data, filter)).to eq(123.45)
+      end
     end
   end
 
   describe '#filter_array_of_hashes' do
-    let(:array) { data['firstkey']['secondkey'] }
-    let(:filter) { %w(filterkey SecondFilter) }
+    let(:array) do
+      [
+        {
+          'OfficialName' => 'FirstAid, Moscow',
+          'Role' => 'Payer'
+        },
+        {
+          'Id' => '84266',
+          'OfficialName' => 'FirstAid, Moscow (442, Glow st)',
+          'Role' => 'Receiver'
+        }
+      ]
+    end
+    let(:filter) { %w(Role Payer) }
 
     specify do
       expect(subject.send(:filter_array_of_hashes, array, filter)).
-        to eq('filterkey' => 'SecondFilter', 'filtervalue' => 'SecondValue')
+        to eq('OfficialName' => 'FirstAid, Moscow', 'Role' => 'Payer')
     end
   end
 
   describe '#nested_mapping' do
     let(:nested_mapping) do
       {
-        everything: [
-          'firstkey',
-          'secondkey',
-          %w(filterkey FirstFilter),
-          'filtervalue'
-        ]
+        receiver: ['Contractors', 'Contractor', %w(Role Receiver), 'Id']
       }
     end
+
     specify do
       expect(subject.send(:nested_mapping, nested_properties)).
         to eq(nested_mapping)
