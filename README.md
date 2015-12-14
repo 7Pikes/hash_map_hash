@@ -1,3 +1,5 @@
+[![Gem Version](https://fury-badge.herokuapp.com/rb/hash_map_hash.png)](http://badge.fury.io/rb/hash_map_hash)
+
 ## hash_map_hash
 
 The `hash_map_hash` is a parser that transforms data structures (converted to
