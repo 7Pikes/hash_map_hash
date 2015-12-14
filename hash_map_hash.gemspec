@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'hash_map_hash'
-  s.version     = '1.0.1'
-  s.date        = '2015-11-28'
+  s.version     = '1.0.2'
+  s.date        = Date.today
   s.summary     = 'Convert hash to hash using hash map'
   s.description = 'Flatten deeply nested hash and convert keys'
   s.authors     = ['Denis Peplin']
