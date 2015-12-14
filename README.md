@@ -1,4 +1,5 @@
 [![Gem Version](https://fury-badge.herokuapp.com/rb/hash_map_hash.png)](http://badge.fury.io/rb/hash_map_hash)
+[![Build Status](https://api.travis-ci.org/7Pikes/hash_map_hash.png?branch=master)](http://travis-ci.org/7Pikes/hash_map_hash)
 
 ## hash_map_hash
 
