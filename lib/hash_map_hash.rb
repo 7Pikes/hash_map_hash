@@ -1,6 +1,10 @@
-require 'deep_dup'
-
 class HashMapHash
+  module DeepDup
+    def deep_dup
+      Marshal.load(Marshal.dump(self))
+    end
+  end
+
   attr_reader :mapping
 
   def initialize(mapping)
