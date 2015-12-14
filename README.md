@@ -14,7 +14,7 @@ With this gem, it is possible to store multiple parser configurations
 every new data format.
 
 It can transform plain data structures, but specifically designed to work with
-complex nested data structures.
+complex nested data structures. An output hash is always flatten.
 
 ## Installation
 
