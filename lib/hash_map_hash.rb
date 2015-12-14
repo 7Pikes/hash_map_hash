@@ -13,11 +13,11 @@ class HashMapHash
   #   { 'Contractor' =>
   #     [
   #       {
-  #         'OfficialName' => 'FirstAid, Moscow',
+  #         'Value' => 'FirstAid, Moscow',
   #         'Role' => 'Payer'
   #       },
   #       {
-  #         'Id' => '84266',
+  #         'Value' => '84266',
   #         'OfficialName' => 'FirstAid, Moscow (442, Glow st)',
   #         'Role' => 'Receiver'
   #       }
@@ -32,8 +32,8 @@ class HashMapHash
   # To get data, we should pass a mapping:
   #
   # mapping = {
-  #   payer:    ['Contractors', 'Contractor', %w(Role Payer), 'OfficialName'],
-  #   receiver: ['Contractors', 'Contractor', %w(Role Receiver), 'Id'],
+  #   payer:    ['Contractors', 'Contractor', %w(Role Payer), 'Value'],
+  #   receiver: ['Contractors', 'Contractor', %w(Role Receiver), 'Value'],
   #   amount:   ['Items', 'NumberOfPositions'],
   #   summ:     'Total'
   # }
@@ -63,11 +63,11 @@ class HashMapHash
   #   {'Contractor' =>
   #     [
   #       {
-  #         'OfficialName' => 'FirstAid, Moscow',
+  #         'Value' => 'FirstAid, Moscow',
   #         'Role' => 'Payer'
   #       },
   #       {
-  #        'Id' => '84266',
+  #        'Value' => '84266',
   #        'OfficialName' => 'FirstAid, Moscow (442, Glow st)',
   #        'Role' => 'Receiver'
   #       }
@@ -76,7 +76,7 @@ class HashMapHash
   # }
   #
   # data_mapping: mapping for single attribute
-  # ['Contractors', 'Contractor', %w(Role Payer), 'Id']
+  # ['Contractors', 'Contractor', %w(Role Payer), 'Value']
   #
   # This is a recursive method, it takes one key from mapping and uses it
   # to walk through data.
@@ -100,11 +100,11 @@ class HashMapHash
   # array is an array of hashes, for example:
   # [
   #   {
-  #     'OfficialName' => 'FirstAid, Moscow',
+  #     'Value' => 'FirstAid, Moscow',
   #     'Role' => 'Payer'
   #   },
   #   {
-  #     'Id' => '84266',
+  #     'Value' => '84266',
   #     'OfficialName' => 'FirstAid, Moscow (442, Glow st)',
   #     'Role' => 'Receiver'
   #   }
@@ -115,7 +115,7 @@ class HashMapHash
   # The output is one particular array element:
   #
   # {
-  #   'OfficialName' => 'FirstAid, Moscow',
+  #   'Value' => 'FirstAid, Moscow',
   #   'Role' => 'Payer'
   # },
   def filter_array_of_hashes(data_array, keyvalue_filter)
@@ -126,13 +126,13 @@ class HashMapHash
   end
 
   # This metod translates nested_properties to mapping format.
-  # It helps avoid repeating multiple keys on one level
+  # It helps avoValue repeating multiple keys on one level
   #
   # Sample:
   # nested_properties = {
   #   prefix: %w(Contractors Contractor),
   #   filter_key: 'Role',
-  #   value_key: 'Id',
+  #   value_key: 'Value',
   #   keys: {
   #     payer: 'Payer',
   #     receiver: 'Receiver'
@@ -140,10 +140,10 @@ class HashMapHash
   # }
   #
   # Output:
-  #
-  # payer:    ['Contractors', 'Contractor', %w(Role Payer), 'Id'],
-  # receiver: ['Contractors', 'Contractor', %w(Role Receiver), 'Id'],
-  #
+  # {
+  #   payer:    ['Contractors', 'Contractor', %w(Role Payer), 'Value'],
+  #   receiver: ['Contractors', 'Contractor', %w(Role Receiver), 'Value']
+  # }
   def nested_mapping(nested_properties)
     nested_properties[:keys].each_with_object({}) do |(key, raw_key), result|
       result[key] = nested_properties[:prefix] +

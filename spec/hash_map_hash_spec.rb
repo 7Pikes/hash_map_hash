@@ -3,8 +3,8 @@ require 'spec_helper'
 describe HashMapHash do
   let(:mapping) do
     {
-      payer:    ['Contractors', 'Contractor', %w(Role Payer), 'OfficialName'],
-      receiver: ['Contractors', 'Contractor', %w(Role Receiver), 'Id'],
+      payer:    ['Contractors', 'Contractor', %w(Role Payer), 'Value'],
+      receiver: ['Contractors', 'Contractor', %w(Role Receiver), 'Value'],
       amount:   ['Items', 'NumberOfPositions'],
       summ:     'Total'
     }
@@ -13,8 +13,9 @@ describe HashMapHash do
     {
       prefix: %w(Contractors Contractor),
       filter_key: 'Role',
-      value_key: 'Id',
+      value_key: 'Value',
       keys: {
+        payer: 'Payer',
         receiver: 'Receiver'
       }
     }
@@ -24,11 +25,11 @@ describe HashMapHash do
       { 'Contractor' =>
         [
           {
-            'OfficialName' => 'FirstAid, Moscow',
+            'Value' => 'FirstAid, Moscow',
             'Role' => 'Payer'
           },
           {
-            'Id' => '84266',
+            'Value' => '84266',
             'OfficialName' => 'FirstAid, Moscow (442, Glow st)',
             'Role' => 'Receiver'
           }
@@ -85,16 +86,22 @@ describe HashMapHash do
   end
 
   describe '#add_nested_properties' do
-    let(:initial_mapping) { { a: :b } }
-    let(:nested_mapping) { { c: :d } }
-    let(:mapping) { { a: :b, c: :d } }
-    let(:nested_properties) { double :nested_properties }
+    let(:initial_mapping) do
+      {
+        amount:   ['Items', 'NumberOfPositions'],
+        summ:     'Total'
+      }
+    end
+    let(:nested_mapping) do
+      {
+        payer:    ['Contractors', 'Contractor', %w(Role Payer), 'Value'],
+        receiver: ['Contractors', 'Contractor', %w(Role Receiver), 'Value']
+      }
+    end
+    #let(:nested_properties) { double :nested_properties }
     subject { described_class.new initial_mapping }
 
     specify do
-      expect(nested_properties).to receive(:any?).and_return(true)
-      expect(subject).to receive(:nested_mapping).with(nested_properties).
-        and_return(nested_mapping)
       expect(subject.add_nested_properties(nested_properties)).to eq(subject)
       expect(subject.instance_variable_get('@mapping')).to eq(mapping)
     end
@@ -102,7 +109,7 @@ describe HashMapHash do
 
   describe '#filtered_deep_fetch' do
     context 'with filter' do
-    let(:filter) { ['Contractors', 'Contractor', %w(Role Receiver), 'Id'] }
+    let(:filter) { ['Contractors', 'Contractor', %w(Role Receiver), 'Value'] }
 
     specify do
       expect(subject.send(:filtered_deep_fetch, data, filter)).to eq('84266')
@@ -122,11 +129,11 @@ describe HashMapHash do
     let(:array) do
       [
         {
-          'OfficialName' => 'FirstAid, Moscow',
+          'Value' => 'FirstAid, Moscow',
           'Role' => 'Payer'
         },
         {
-          'Id' => '84266',
+          'Value' => '84266',
           'OfficialName' => 'FirstAid, Moscow (442, Glow st)',
           'Role' => 'Receiver'
         }
@@ -136,14 +143,15 @@ describe HashMapHash do
 
     specify do
       expect(subject.send(:filter_array_of_hashes, array, filter)).
-        to eq('OfficialName' => 'FirstAid, Moscow', 'Role' => 'Payer')
+        to eq('Value' => 'FirstAid, Moscow', 'Role' => 'Payer')
     end
   end
 
   describe '#nested_mapping' do
     let(:nested_mapping) do
       {
-        receiver: ['Contractors', 'Contractor', %w(Role Receiver), 'Id']
+        payer:    ['Contractors', 'Contractor', %w(Role Payer), 'Value'],
+        receiver: ['Contractors', 'Contractor', %w(Role Receiver), 'Value']
       }
     end
 

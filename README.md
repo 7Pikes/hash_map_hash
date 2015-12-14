@@ -41,11 +41,11 @@ data = { 'Contractors' =>
   { 'Contractor' =>
     [
       {
-        'OfficialName' => 'FirstAid, Moscow',
+        'Value' => 'FirstAid, Moscow',
         'Role' => 'Payer'
       },
       {
-        'Id' => '84266',
+        'Value' => '84266',
         'OfficialName' => 'FirstAid, Moscow (442, Glow st)',
         'Role' => 'Receiver'
       }
@@ -58,17 +58,86 @@ data = { 'Contractors' =>
 }
 
 mapping = {
-  payer:    ['Contractors', 'Contractor', %w(Role Payer), 'OfficialName'],
-  receiver: ['Contractors', 'Contractor', %w(Role Receiver), 'Id'],
+  payer:    ['Contractors', 'Contractor', %w(Role Payer), 'Value'],
+  receiver: ['Contractors', 'Contractor', %w(Role Receiver), 'Value'],
   amount:   ['Items', 'NumberOfPositions'],
   summ:     'Total'
 }
 
 HashMapHash.new(mapping).map(data)
-#{
-#  payer: 'FirstAid, Moscow',
-#  receiver: '84266',
-#  amount: 10,
-#  summ: 123.45
-#}
+# {
+#   payer: 'FirstAid, Moscow',
+#   receiver: '84266',
+#   amount: 10,
+#   summ: 123.45
+# }
+```
+
+## Nested properties
+
+In nested data example, two filters applied under 'Contractors' and 'Contractor'
+keys. It's not a big problem, even for tens of such filters, but they can
+be made more DRY by using nested properties.
+
+```ruby
+# data is the same as in the nested data example
+data = { 'Contractors' =>
+  { 'Contractor' =>
+    [
+      {
+        'Value' => 'FirstAid, Moscow',
+        'Role' => 'Payer'
+      },
+      {
+        'Value' => '84266',
+        'OfficialName' => 'FirstAid, Moscow (442, Glow st)',
+        'Role' => 'Receiver'
+      }
+    ]
+  },
+  'Items' => {
+    'NumberOfPositions' => 10
+  },
+  'Total' => 123.45
+}
+
+# initial maping, before adding nested properties
+mapping = {
+  amount:   ['Items', 'NumberOfPositions'],
+  summ:     'Total'
+}
+
+nested_properties = {
+  nested_properties = {
+    prefix: %w(Contractors Contractor),
+    filter_key: 'Role',
+    value_key: 'Value',
+    keys: {
+      payer: 'Payer',
+      receiver: 'Receiver'
+    }
+  }
+}
+
+mapper = HashMapHash.new(mapping)
+mapper.add_nested_properties nested_properties
+
+# check for new mapping
+# not it is the same as in the nested data example
+mapper.mapping
+# mapping = {
+#   payer:    ['Contractors', 'Contractor', %w(Role Payer), 'Value'],
+#   receiver: ['Contractors', 'Contractor', %w(Role Receiver), 'Value'],
+#   amount:   ['Items', 'NumberOfPositions'],
+#   summ:     'Total'
+# }
+
+# same result as in the nested data example
+mapper.map data
+# {
+#   payer: 'FirstAid, Moscow',
+#   receiver: '84266',
+#   amount: 10,
+#   summ: 123.45
+# }
 ```
