@@ -123,7 +123,7 @@ mapper = HashMapHash.new(mapping)
 mapper.add_nested_properties nested_properties
 
 # check for new mapping
-# not it is the same as in the nested data example
+# now it is the same as in the nested data example
 mapper.mapping
 # mapping = {
 #   payer:    ['Contractors', 'Contractor', %w(Role Payer), 'Value'],
