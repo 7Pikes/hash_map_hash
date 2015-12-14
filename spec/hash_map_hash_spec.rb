@@ -21,7 +21,8 @@ describe HashMapHash do
   end
   let(:data) do
     { 'Contractors' =>
-        { 'Contractor' => [
+      { 'Contractor' =>
+        [
           {
             'OfficialName' => 'FirstAid, Moscow',
             'Role' => 'Payer'

@@ -33,3 +33,41 @@ mapping = {
 
 HashMapHash.new(mapping).map(data) # { amount: 10, summ: 123.0 }
 ```
+
+```ruby
+# nested data structures
+data = { 'Contractors' =>
+  { 'Contractor' =>
+    [
+      {
+        'OfficialName' => 'FirstAid, Moscow',
+        'Role' => 'Payer'
+      },
+      {
+        'Id' => '84266',
+        'OfficialName' => 'FirstAid, Moscow (442, Glow st)',
+        'Role' => 'Receiver'
+      }
+    ]
+  },
+  'Items' => {
+    'NumberOfPositions' => 10
+  },
+  'Total' => 123.45
+}
+
+mapping = {
+  payer:    ['Contractors', 'Contractor', %w(Role Payer), 'OfficialName'],
+  receiver: ['Contractors', 'Contractor', %w(Role Receiver), 'Id'],
+  amount:   ['Items', 'NumberOfPositions'],
+  summ:     'Total'
+}
+
+HashMapHash.new(mapping).map(data)
+#{
+#  payer: 'FirstAid, Moscow',
+#  receiver: '84266',
+#  amount: 10,
+#  summ: 123.45
+#}
+```

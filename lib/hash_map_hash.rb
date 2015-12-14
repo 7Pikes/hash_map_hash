@@ -10,7 +10,8 @@ class HashMapHash
   # Data sample (source_data)
   #
   # { 'Contractors' =>
-  #     { 'Contractor' => [
+  #   { 'Contractor' =>
+  #     [
   #       {
   #         'OfficialName' => 'FirstAid, Moscow',
   #         'Role' => 'Payer'
@@ -58,17 +59,17 @@ class HashMapHash
   private
 
   # data: hash with source data, for example:
-  # {"Contractors"=>
-  #   {"Contractor"=>
+  # {'Contractors' =>
+  #   {'Contractor' =>
   #     [
   #       {
-  #         "OfficialName"=>"FirstAid, Moscow",
-  #         "Role"=>"Payer"
+  #         'OfficialName' => 'FirstAid, Moscow',
+  #         'Role' => 'Payer'
   #       },
   #       {
-  #        "Id"=>"84266",
-  #        "OfficialName"=>"FirstAid, Moscow (442, Glow st)",
-  #        "Role"=>"Receiver"
+  #        'Id' => '84266',
+  #        'OfficialName' => 'FirstAid, Moscow (442, Glow st)',
+  #        'Role' => 'Receiver'
   #       }
   #     ]
   #   }
