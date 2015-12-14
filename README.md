@@ -9,6 +9,10 @@ hashes) by using other hashes as maps.
 It can be uses to transform `JSON`, `XML`, or anything that can be converted
 to `Hash`.
 
+With this gem, it is possible to store multiple parser configurations
+(mappings) in files or in a database, and avoid writing a new parser for
+every new data format.
+
 It can transform plain data structures, but specifically designed to work with
 complex nested data structures.
 
@@ -79,8 +83,8 @@ HashMapHash.new(mapping).map(data)
 ## Nested properties
 
 In nested data example, two filters applied under 'Contractors' and 'Contractor'
-keys. It's not a big problem, even for tens of such filters, but they can
-be made more DRY by using nested properties.
+keys. This duplication is not a big problem, even for tens of such filters,
+but you can make them more DRY if you want by using nested properties.
 
 ```ruby
 # data is the same as in the nested data example
@@ -126,7 +130,7 @@ mapper.add_nested_properties nested_properties
 # check for new mapping
 # now it is the same as in the nested data example
 mapper.mapping
-# mapping = {
+# {
 #   payer:    ['Contractors', 'Contractor', %w(Role Payer), 'Value'],
 #   receiver: ['Contractors', 'Contractor', %w(Role Receiver), 'Value'],
 #   amount:   ['Items', 'NumberOfPositions'],
