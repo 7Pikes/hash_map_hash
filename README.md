@@ -110,14 +110,12 @@ mapping = {
 }
 
 nested_properties = {
-  nested_properties = {
-    prefix: %w(Contractors Contractor),
-    filter_key: 'Role',
-    value_key: 'Value',
-    keys: {
-      payer: 'Payer',
-      receiver: 'Receiver'
-    }
+  prefix: %w(Contractors Contractor),
+  filter_key: 'Role',
+  value_key: 'Value',
+  keys: {
+    payer: 'Payer',
+    receiver: 'Receiver'
   }
 }
 
