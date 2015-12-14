@@ -47,9 +47,27 @@ describe HashMapHash do
   end
 
   describe '#map' do
-    specify do
-      expect(subject.map data).
-        to eq(anything: 'ThirdValue', something: 'FifthValue')
+    context 'nested' do
+      let(:mapping) do
+        {
+          anything: 'thirdkey',
+          something: %w(fourthkey fifthkey),
+          everything: [
+            'firstkey',
+            'secondkey',
+            %w(filterkey FirstFilter),
+            'filtervalue'
+          ]
+        }
+      end
+
+      specify do
+        expect(subject.map data).to eq(
+          everything: 'FirstValue',
+          anything: 'ThirdValue',
+          something: 'FifthValue'
+        )
+      end
     end
   end
 
