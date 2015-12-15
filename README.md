@@ -6,7 +6,7 @@
 The `hash_map_hash` is a parser that transforms data structures (converted to
 hashes) by using other hashes as maps.
 
-It can be uses to transform `JSON`, `XML`, or anything that can be converted
+It can be used to transform `JSON`, `XML`, or anything that can be converted
 to `Hash`.
 
 With this gem, it is possible to store multiple parser configurations
