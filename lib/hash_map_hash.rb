@@ -1,14 +1,8 @@
 class HashMapHash
-  module DeepDup
-    def deep_dup
-      Marshal.load(Marshal.dump(self))
-    end
-  end
-
   attr_reader :mapping
 
   def initialize(mapping)
-    @mapping = mapping.extend(DeepDup)
+    @mapping = mapping
   end
 
   # Data sample (source_data)
@@ -50,7 +44,7 @@ class HashMapHash
   #   summ: 123.45
   # }
   def map(source_data)
-    mapping.deep_dup.each_with_object({}) do |(attribute_key, attribute_mapping), result|
+    mapping.dup.each_with_object({}) do |(attribute_key, attribute_mapping), result|
       result[attribute_key] = filtered_deep_fetch source_data, Array(attribute_mapping)
     end
   end
