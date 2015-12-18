@@ -13,8 +13,8 @@ With this gem, it is possible to store multiple parser configurations
 (mappings) in files or in a database, and avoid writing a new parser for
 every new data format.
 
-It can transform plain data structures, but specifically designed to work with
-complex nested data structures. An output hash is always flatten.
+It can transform plain data structures, but is specifically designed to work
+with complex nested data structures. The resulting hash is always flat.
 
 ## Installation
 
@@ -82,9 +82,10 @@ HashMapHash.new(mapping).map(data)
 
 ## Nested properties
 
-In nested data example, two filters applied under 'Contractors' and 'Contractor'
-keys. This duplication is not a big problem, even for tens of such filters,
-but you can make them more DRY if you want by using nested properties.
+In the nested data example, two filters were applied under 'Contractors' and
+'Contractor' keys. This duplication is not a big problem, even for dozens of
+such filters, but you can make them more DRY if you want by using nested
+properties.
 
 ```ruby
 # data is the same as in the nested data example
@@ -127,8 +128,8 @@ nested_properties = {
 mapper = HashMapHash.new(mapping)
 mapper.add_nested_properties nested_properties
 
-# check for new mapping
-# now it is the same as in the nested data example
+# Here is the new mapping.
+# Now it is the same as in the nested data example.
 mapper.mapping
 # {
 #   payer:    ['Contractors', 'Contractor', %w(Role Payer), 'Value'],
@@ -137,7 +138,7 @@ mapper.mapping
 #   summ:     'Total'
 # }
 
-# same result as in the nested data example
+# Same result as in the nested data example
 mapper.map data
 # {
 #   payer: 'FirstAid, Moscow',
