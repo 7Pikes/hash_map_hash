@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.authors     = ['Denis Peplin']
   s.email       = 'denis.peplin@gmail.com'
   s.files       = ['lib/hash_map_hash.rb']
-  s.homepage    = 'http://github.com/denispeplin/hash_map_hash'
+  s.homepage    = 'http://github.com/7Pikes/hash_map_hash'
   s.license     = 'MIT'
 
   s.required_ruby_version = '~> 2.0'
