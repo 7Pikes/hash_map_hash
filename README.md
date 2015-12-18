@@ -147,6 +147,10 @@ mapper.map data
 # }
 ```
 
+# Backward transformation
+
+For backward transformation use [hash_template](https://github.com/denispeplin/hash_template) gem.
+
 ## License
 
 MIT.
