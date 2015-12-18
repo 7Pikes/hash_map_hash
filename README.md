@@ -146,3 +146,7 @@ mapper.map data
 #   summ: 123.45
 # }
 ```
+
+## License
+
+MIT.
