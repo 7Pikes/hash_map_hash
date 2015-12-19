@@ -80,6 +80,8 @@ HashMapHash.new(mapping).map(data)
 # }
 ```
 
+Note about mapping: each array element represents one level of a data hash. When element itself is an array, it is used for filtering a corresponding level of input hash, which in this case is also an array.
+
 ## Nested properties
 
 In the nested data example, two filters were applied under 'Contractors' and
